@@ -1,9 +1,9 @@
 "use strict";
 (function () {
     window.onload = function () {
-        document.getElementsByClassName("js-quiz-start-button")[0].onclick = function () {
-            startQuiz();
-        }
+        Array.from(document.getElementsByClassName("js-quiz-start-button")).forEach(function (element) { element.onclick = function () { startQuiz(); } });
+        Array.from(document.getElementsByClassName("js-quiz-next-button")).forEach(function (element) { element.onclick = function () { changeQuestion("forward"); } });
+        Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element) { element.onclick = function () { changeQuestion("backward"); } });
     };
 
     var quizData;
@@ -24,7 +24,7 @@
         Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element) { element.classList.remove("display-none") });
         Array.from(document.getElementsByClassName("js-quiz-next-button")).forEach(function (element) { element.classList.remove("display-none") });
         Array.from(document.getElementsByClassName("js-quiz-answers-radio")).forEach(function (element) { element.classList.remove("display-none") });
-        showQuestion(0);
+        changeQuestion();
     }
 
     function getQuizJSON() {
@@ -48,6 +48,17 @@
     function setQuizMessage(message) {
         Array.from(document.getElementsByClassName("js-quiz-message")).forEach(function (element) { element.innerHTML = message });
     }
+
+    function changeQuestion(direction) {
+        var changeValue = direction === "forward" ? 1 : direction === "backward" ? -1 : 0;
+        var which = parseInt(Array.from(document.getElementsByClassName("js-quiz-answers-radio")).map(function (element) { return element.getAttribute('data-current-question') })[0]) + changeValue;
+        if (!(which >= quizData['questions'].length || which < 0)) {
+            Array.from(document.getElementsByClassName("js-quiz-answers-radio")).forEach(function (element) { element.setAttribute('data-current-question', which) });
+            showQuestion(which);
+        }
+        handleWithDisablingButtons(which);
+    }
+
     function showQuestion(which) {
         setQuizMessage(quizData['questions'][which]['question']);
         Array.from(document.getElementsByClassName("js-quiz-answers")).forEach(function (element, index) { element.innerHTML = quizData['questions'][which]['answers'][index]['answer'] });
@@ -63,4 +74,15 @@
                     })
             })
     }
+
+    function handleWithDisablingButtons(which) {
+        if (which <= 0) {
+            Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element, index) { element.classList.add("sg-icon-as-button--disabled"); });
+        }
+        else {
+            Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element, index) { element.classList.remove("sg-icon-as-button--disabled"); });
+        }
+    }
 })();
+
+//  
