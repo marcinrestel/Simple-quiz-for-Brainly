@@ -17,13 +17,66 @@
             <div class="sg-content-box__content sg-content-box__content--spaced-bottom-large">
                 <p class="sg-text sg-text--standout js-quiz-message">Please wait for the quiz to load...</p>
             </div>
+            <div class="sg-content-box__content sg-content-box__content--spaced-bottom-large js-quiz-answers-radio display-none">
+                <div class="sg-label sg-label--large">
+                    <div class="sg-label__icon">
+                        <div class="sg-radio">
+                            <input class="sg-radio__element" name="checked-answer" id="radio-1" type="radio">
+                            <label class="sg-radio__ghost" for="radio-1"></label>
+                        </div>
+                    </div>
+                    <label class="sg-label__text js-quiz-answers" for="radio-1"></label>
+                </div>
+                <div class="sg-label sg-label--large">
+                    <div class="sg-label__icon">
+                        <div class="sg-radio">
+                            <input class="sg-radio__element" name="checked-answer" id="radio-2" type="radio">
+                            <label class="sg-radio__ghost" for="radio-2"></label>
+                        </div>
+                    </div>
+                    <label class="sg-label__text js-quiz-answers" for="radio-2"></label>
+                </div>
+                <div class="sg-label sg-label--large">
+                    <div class="sg-label__icon">
+                        <div class="sg-radio">
+                            <input class="sg-radio__element" name="checked-answer" id="radio-3" type="radio">
+                            <label class="sg-radio__ghost" for="radio-3"></label>
+                        </div>
+                    </div>
+                    <label class="sg-label__text js-quiz-answers" for="radio-3"></label>
+                </div>
+                <div class="sg-label sg-label--large">
+                    <div class="sg-label__icon">
+                        <div class="sg-radio">
+                            <input class="sg-radio__element" name="checked-answer" id="radio-4" type="radio">
+                            <label class="sg-radio__ghost" for="radio-4"></label>
+                        </div>
+                    </div>
+                    <label class="sg-label__text js-quiz-answers" for="radio-4"></label>
+                </div>
+            </div>
             <div class="sg-content-box__actions sg-content-box__actions--with-elements-to-right">
                 <button type="button" class="sg-button-primary js-quiz-start-button display-none">Start!</button>
+                <button class="sg-icon-as-button sg-icon-as-button--with-border js-quiz-previous-button display-none">
+                    <div class="sg-icon-as-button__hole">
+                        <svg class="sg-icon sg-icon--adaptive">
+                            <use xlink:href="#icon-arrow_left"></use>
+                        </svg>
+                    </div>
+                </button>
+                <button class="sg-icon-as-button sg-icon-as-button--with-border js-quiz-next-button display-none">
+                    <div class="sg-icon-as-button__hole">
+                        <svg class="sg-icon sg-icon--adaptive">
+                            <use xlink:href="#icon-arrow_right"></use>
+                        </svg>
+                    </div>
+                </button>
             </div>
         </div>
     </div>
-</body>
 
-<script src="js/quiz.js"></script>
+    <script src="https://styleguide.brainly.com/images/icons-5459066133.js"></script>
+    <script src="js/quiz.js"></script>
+</body>
 
 </html>

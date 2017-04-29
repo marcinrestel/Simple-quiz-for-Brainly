@@ -14,14 +14,17 @@
 
     function prepareForStartingTheQuiz(answerJSON) {
         quizData = answerJSON;
-        document.getElementsByClassName("js-quiz-start-button")[0].classList.remove("display-none");
-        var timeLimit = quizData['time_seconds'] > 0 ? "Please be aware you have to end the quiz within " + quizData['time_seconds'] + " seconds. There will be no possibility to pause." : "";
-        setQuizMessage("Everything is set up for your quiz. " + timeLimit + " Good luck!");
+        Array.from(document.getElementsByClassName("js-quiz-start-button")).forEach(function (element) { element.classList.remove("display-none") });
+        var timeLimit = quizData['time_seconds'] > 0 ? "Please be aware you have to end the quiz within " + quizData['time_seconds'] + " seconds. There will be no possibility to pause. " : "";
+        setQuizMessage("Everything is set up for your quiz. " + timeLimit + "Good luck!");
     }
 
     function startQuiz() {
-        document.getElementsByClassName("js-quiz-start-button")[0].classList.add("display-none");
-        // showQuestion(1);
+        Array.from(document.getElementsByClassName("js-quiz-start-button")).forEach(function (element) { element.classList.add("display-none") });
+        Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element) { element.classList.remove("display-none") });
+        Array.from(document.getElementsByClassName("js-quiz-next-button")).forEach(function (element) { element.classList.remove("display-none") });
+        Array.from(document.getElementsByClassName("js-quiz-answers-radio")).forEach(function (element) { element.classList.remove("display-none") });
+        showQuestion(0);
     }
 
     function getQuizJSON() {
@@ -43,10 +46,21 @@
     }
 
     function setQuizMessage(message) {
-        document.getElementsByClassName("js-quiz-message")[0].innerHTML = message;
+        Array.from(document.getElementsByClassName("js-quiz-message")).forEach(function (element) { element.innerHTML = message });
+    }
+    function showQuestion(which) {
+        setQuizMessage(quizData['questions'][which]['question']);
+        Array.from(document.getElementsByClassName("js-quiz-answers")).forEach(function (element, index) { element.innerHTML = quizData['questions'][which]['answers'][index]['answer'] });
+        uncheckAllAnswerRadioButtons();
     }
 
-    // function showQuestion(which){
-    //     setQuizMessage(quizData[1]);
-    // }
+    function uncheckAllAnswerRadioButtons() {
+        Array.from(document.getElementsByClassName("js-quiz-answers-radio"))
+            .forEach(function (element) {
+                Array.from(element.querySelectorAll('input'))
+                    .forEach(function (element) {
+                        element.checked = false
+                    })
+            })
+    }
 })();
