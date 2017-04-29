@@ -6,7 +6,7 @@
         Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element) { element.onclick = function () { changeQuestion("backward"); } });
         Array.from(document.getElementsByName("js-quiz-checked-answer")).forEach(function (element) {
             element.onclick = function () {
-                Array.from(document.getElementsByClassName("js-quiz-next-button")).forEach(function (element, index) { element.classList.remove("sg-icon-as-button--disabled"); });
+                Array.from(document.getElementsByClassName("js-quiz-next-button")).forEach(function (element, index) { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
             }
         });
     };
@@ -30,7 +30,7 @@
         Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element) { element.classList.remove("display-none") });
         Array.from(document.getElementsByClassName("js-quiz-next-button")).forEach(function (element) { element.classList.remove("display-none") });
         Array.from(document.getElementsByClassName("js-quiz-answers-radio")).forEach(function (element) { element.classList.remove("display-none") });
-        changeQuestion();
+        showQuestion(0);
     }
 
     function getQuizJSON() {
@@ -57,8 +57,8 @@
         var changeValue = direction === "forward" ? 1 : direction === "backward" ? -1 : 0;
         var which = parseInt(Array.from(document.getElementsByClassName("js-quiz-answers-radio")).map(function (element) { return element.getAttribute('data-current-question') })[0]) + changeValue;
         storeCurrentAnswer();
-        handleDisablingButtonsOnQuestionChange(which);
         if (!(which >= quizData['questions'].length || which < 0)) {
+            handleDisablingButtonsOnQuestionChange(which);
             Array.from(document.getElementsByClassName("js-quiz-answers-radio")).forEach(function (element) { element.setAttribute('data-current-question', which) });
             showQuestion(which);
         }
@@ -83,12 +83,12 @@
 
     function handleDisablingButtonsOnQuestionChange(which) {
         if (which <= 0) {
-            Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element, index) { element.classList.add("sg-icon-as-button--disabled"); });
+            Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element, index) { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
         }
         else {
-            Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element, index) { element.classList.remove("sg-icon-as-button--disabled"); });
+            Array.from(document.getElementsByClassName("js-quiz-previous-button")).forEach(function (element, index) { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
         }
-        Array.from(document.getElementsByClassName("js-quiz-next-button")).forEach(function (element, index) { element.classList.add("sg-icon-as-button--disabled"); });
+        Array.from(document.getElementsByClassName("js-quiz-next-button")).forEach(function (element, index) { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
     }
 
     function storeCurrentAnswer() {
