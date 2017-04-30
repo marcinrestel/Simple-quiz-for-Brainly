@@ -1,0 +1,21 @@
+.display-none {
+    display: none;
+}
+
+.data-container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.data-container--with-vertically-centered-elements {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.sg-icon-as-button--disabled {
+    opacity: 0.45;
+    cursor: default;
+}
