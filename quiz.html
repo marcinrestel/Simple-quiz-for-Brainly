@@ -14,6 +14,18 @@
                     Quiz
                 </h2>
             </div>
+
+            <div class="sg-content-box__content sg-content-box__content--spaced-bottom-large js-quiz-data display-none">
+                <div class="quiz-progress-bar">
+                    <div class="quiz-progress-bar__text js-quiz-progress-bar-text">
+                            0/0
+                    </div>
+                </div>
+                <!--<div class="quiz-progress-bar__quiz-timer" style="float:right">
+                        01:30
+                </div>-->
+            </div>
+
             <div class="sg-content-box__content sg-content-box__content--spaced-bottom-large">
                 <p class="sg-text sg-text--standout js-quiz-message">Please wait for the quiz to load...</p>
             </div>
@@ -57,15 +69,17 @@
             </div>
             <div class="sg-content-box__actions sg-content-box__actions--with-centered-elements">
                 <button type="button" class="sg-button-primary js-quiz-start-button display-none">Start!</button>
-                <button class="sg-icon-as-button sg-icon-as-button--with-border js-quiz-previous-button display-none sg-icon-as-button--disabled" disabled>
+                <button class="sg-icon-as-button sg-icon-as-button--with-border js-quiz-previous-button display-none sg-icon-as-button--disabled"
+                    disabled>
                     <div class="sg-icon-as-button__hole">
                         <svg class="sg-icon sg-icon--adaptive">
                             <use xlink:href="#icon-arrow_left"></use>
                         </svg>
                     </div>
                 </button>
-                <div class="sg-separator"></div>
-                <button class="sg-icon-as-button sg-icon-as-button--with-border js-quiz-next-button display-none sg-icon-as-button--disabled" disabled>
+                <div class="sg-separator js-action-buttons-seperator display-none"></div>
+                <button class="sg-icon-as-button sg-icon-as-button--with-border js-quiz-next-button display-none sg-icon-as-button--disabled"
+                    disabled>
                     <div class="sg-icon-as-button__hole">
                         <svg class="sg-icon sg-icon--adaptive">
                             <use xlink:href="#icon-arrow_right"></use>
