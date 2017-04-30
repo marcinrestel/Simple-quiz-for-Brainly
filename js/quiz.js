@@ -49,6 +49,7 @@
 
         function prepareForStartingTheQuiz(answerJSON) {
             quizData = answerJSON;
+            console.log(quizData);
             quizData['answers'] = Array();
             startButtonsArray.forEach(function (element) { element.classList.remove("display-none") });
             var timeLimit = quizData['time_seconds'] > 0 ? "Please be aware you have to end the quiz within " + quizData['time_seconds'] + " seconds. There will be no possibility to pause. " : "";
@@ -91,7 +92,7 @@
                 showQuestion(which);
             }
             else if (which >= quizData['questions'].length) {
-                // showResult();
+                pub.showResults();
             }
         }
 
@@ -114,8 +115,40 @@
             nextButtonsArray.forEach(function (element, index) { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
         }
 
+        pub.showResults = function () {
+            nextButtonsArray.forEach(function (element, index) { element.classList.add("display-none"); });
+            previousButtonsArray.forEach(function (element, index) { element.classList.add("display-none"); });
+            answersFormsArray.forEach(function (element, index) { element.classList.add("display-none"); });
+            setQuizMessage(createResultView());
+        }
+
+        function createResultView() {
+            var message = "";
+            for (let eachQuestionIndex in quizData['questions']) {
+                let eachQuestion = quizData['questions'][eachQuestionIndex];
+                message += '<div class="sg-content-box__content sg-content-box__content--spaced-bottom-large">\
+                <p class="sg-text sg-text--standout">' + eachQuestion['question'] + '</p>\
+            </div>\
+            <div class="sg-content-box__content sg-content-box__content--spaced-bottom-large">';
+                for (let eachAnswerIndex in eachQuestion['answers']) {
+                    let eachAnswer = eachQuestion['answers'][eachAnswerIndex];
+                    let isChecked = eachAnswerIndex == quizData['answers'][eachQuestionIndex] ? " checked" : "";
+                    message += '<div class="sg-label">\
+                        <div class="sg-label__icon">\
+                            <div class="sg-radio">\
+                                <input class="sg-radio__element" name="js-result-radio-input-' + eachQuestion['id'] + '" id="radio-' + eachAnswer['id'] + '" type="radio" disabled' + isChecked + '>\
+                                <label class="sg-radio__ghost" for="radio-' + eachAnswer['id'] + '"></label>\
+                            </div>\
+                        </div>\
+                        <label class="sg-label__text js-quiz-answers-labels" for="radio-' + eachAnswer['id'] + '">' + eachAnswer['answer'] + '</label>\
+                    </div>';
+                }
+                message += '</div>';
+            }
+            return message;
+        }
+
         return pub;
     })();
-
 
 })();
