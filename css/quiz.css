@@ -19,3 +19,7 @@
     opacity: 0.45;
     cursor: default;
 }
+
+.sg-label__text--underline{
+    text-decoration: underline;
+}

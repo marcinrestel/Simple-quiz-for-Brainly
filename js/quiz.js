@@ -1,4 +1,4 @@
-(function () {
+// (function () {
     "use strict";
 
     window.onload = function () {
@@ -126,21 +126,24 @@
             var message = "";
             for (let eachQuestionIndex in quizData['questions']) {
                 let eachQuestion = quizData['questions'][eachQuestionIndex];
-                message += '<div class="sg-content-box__content sg-content-box__content--spaced-bottom-large">\
-                <p class="sg-text sg-text--standout">' + eachQuestion['question'] + '</p>\
-            </div>\
-            <div class="sg-content-box__content sg-content-box__content--spaced-bottom-large">';
+                message += '\
+                <div class="sg-content-box__content sg-content-box__content--spaced-bottom-large">\
+                    <p class="sg-text sg-text--standout">' + eachQuestion['question'] + '</p>\
+                </div>\
+                <div class="sg-content-box__content sg-content-box__content--spaced-bottom-large">';
                 for (let eachAnswerIndex in eachQuestion['answers']) {
                     let eachAnswer = eachQuestion['answers'][eachAnswerIndex];
-                    let isChecked = eachAnswerIndex == quizData['answers'][eachQuestionIndex] ? " checked" : "";
-                    message += '<div class="sg-label">\
+                    let isChecked = parseInt(eachAnswerIndex) === quizData['answers'][eachQuestionIndex] ? " checked" : "";
+                    let isCorrect = eachAnswer['correct'] ? " sg-label__text--underline" : "";
+                    message += '\
+                    <div class="sg-label">\
                         <div class="sg-label__icon">\
                             <div class="sg-radio">\
                                 <input class="sg-radio__element" name="js-result-radio-input-' + eachQuestion['id'] + '" id="radio-' + eachAnswer['id'] + '" type="radio" disabled' + isChecked + '>\
                                 <label class="sg-radio__ghost" for="radio-' + eachAnswer['id'] + '"></label>\
                             </div>\
                         </div>\
-                        <label class="sg-label__text js-quiz-answers-labels" for="radio-' + eachAnswer['id'] + '">' + eachAnswer['answer'] + '</label>\
+                        <label class="sg-label__text js-quiz-answers-labels' + isCorrect + '" for="radio-' + eachAnswer['id'] + '">' + eachAnswer['answer'] + '</label>\
                     </div>';
                 }
                 message += '</div>';
@@ -151,4 +154,4 @@
         return pub;
     })();
 
-})();
+// })();
