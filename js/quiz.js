@@ -1,9 +1,9 @@
-// (function () {
+(function () {
     "use strict";
 
     window.onload = function () {
         Quiz.init();
-    };
+    }
 
     var Quiz = (function () {
         var pub = {},
@@ -14,16 +14,18 @@
             quizRadioInputsArray = Array.from(document.getElementsByName("js-quiz-radio-input")),
             answersFormsArray = Array.from(document.getElementsByClassName("js-quiz-answers-form")),
             answersLabelsArray = Array.from(document.getElementsByClassName("js-quiz-answers-labels")),
-            quizMessagesArray = Array.from(document.getElementsByClassName("js-quiz-message"));
+            quizMessagesArray = Array.from(document.getElementsByClassName("js-quiz-message")),
+            actionButtonsSeperator = Array.from(document.getElementsByClassName("js-action-buttons-seperator")),
+            quizAdditonalInfoPanel = Array.from(document.getElementsByClassName('js-quiz-data'));
 
         getQuizJSON()
             .then(answerJSON => prepareForStartingTheQuiz(answerJSON))
             .catch(function () { setQuizMessage("There was an error in loading the quiz. Please try again later. We're sorry for your inconvenience.") });
 
         pub.init = function () {
-            startButtonsArray.forEach(function (element) { element.onclick = function () { startQuiz(); } });
-            nextButtonsArray.forEach(function (element) { element.onclick = function () { changeQuestion("forward"); } });
-            previousButtonsArray.forEach(function (element) { element.onclick = function () { changeQuestion("backward"); } });
+            startButtonsArray.forEach(function (element) { element.addEventListener("click", function () { startQuiz(); }) });
+            nextButtonsArray.forEach(function (element) { element.addEventListener("click", function () { changeQuestion("forward"); }) });
+            previousButtonsArray.forEach(function (element) { element.addEventListener("click", function () { changeQuestion("backward"); }) });
             quizRadioInputsArray.forEach(function (element) {
                 element.onclick = function () {
                     nextButtonsArray.forEach(function (element, index) { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
@@ -61,10 +63,12 @@
         }
 
         function startQuiz() {
-            startButtonsArray.forEach(function (element) { element.classList.add("display-none") });
-            previousButtonsArray.forEach(function (element) { element.classList.remove("display-none") });
-            nextButtonsArray.forEach(function (element) { element.classList.remove("display-none") });
-            answersFormsArray.forEach(function (element) { element.classList.remove("display-none") });
+            startButtonsArray.forEach(function (element) { element.classList.add("display-none"); });
+            previousButtonsArray.forEach(function (element) { element.classList.remove("display-none"); });
+            nextButtonsArray.forEach(function (element) { element.classList.remove("display-none"); });
+            answersFormsArray.forEach(function (element) { element.classList.remove("display-none"); });
+            actionButtonsSeperator.forEach(function (element) { element.classList.remove("display-none"); });
+            quizAdditonalInfoPanel.forEach(function (element) { element.classList.remove("display-none"); });
             showQuestion(0);
         }
 
@@ -72,6 +76,7 @@
             setQuizMessage(quizData['questions'][which]['question']);
             answersLabelsArray.forEach(function (element, index) { element.innerHTML = quizData['questions'][which]['answers'][index]['answer'] });
             quizRadioInputsArray.forEach(function (element, index) { handleWithCheckingRadios(element, index, which); })
+            ProgressBar.changeValue(which + 1, quizData['questions'].length);
         }
 
         function handleWithCheckingRadios(element, index, which) {
@@ -107,18 +112,20 @@
 
         function handleDisablingButtonsOnQuestionChange(which) {
             if (which <= 0) {
-                previousButtonsArray.forEach(function (element, index) { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
+                previousButtonsArray.forEach(function (element) { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
             }
             else {
-                previousButtonsArray.forEach(function (element, index) { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
+                previousButtonsArray.forEach(function (element) { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
             }
-            nextButtonsArray.forEach(function (element, index) { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
+            nextButtonsArray.forEach(function (element) { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
         }
 
         pub.showResults = function () {
-            nextButtonsArray.forEach(function (element, index) { element.classList.add("display-none"); });
-            previousButtonsArray.forEach(function (element, index) { element.classList.add("display-none"); });
-            answersFormsArray.forEach(function (element, index) { element.classList.add("display-none"); });
+            nextButtonsArray.forEach(function (element) { element.classList.add("display-none"); });
+            previousButtonsArray.forEach(function (element) { element.classList.add("display-none"); });
+            answersFormsArray.forEach(function (element) { element.classList.add("display-none"); });
+            actionButtonsSeperator.forEach(function (element) { element.classList.add("display-none"); });
+            quizAdditonalInfoPanel.forEach(function (element) { element.classList.add("display-none"); });
             setQuizMessage(createResultView());
         }
 
@@ -154,4 +161,29 @@
         return pub;
     })();
 
-// })();
+    var ProgressBar = (function () {
+        var pub = {},
+            progressBarText = Array.from(document.getElementsByClassName("js-quiz-progress-bar-text")),
+            quizProgressBar = Array.from(document.getElementsByClassName('quiz-progress-bar'));
+
+        pub.changeValue = function (currentQuestion, allQuestions) {
+            changeProgress(currentQuestion / allQuestions);
+            changeText(currentQuestion + "/" + allQuestions);
+        }
+
+        function changeProgress(value) {
+            var percentage = value * 100 + "%";
+            var style = "background: #fff;\
+                    background: -moz-linear-gradient(left,  #57b2f8 0%, #57b2f8 " + percentage + ", #fff " + percentage + ", #fff 100%);\
+                    background: -webkit-linear-gradient(left,  #57b2f8 0%,#57b2f8 " + percentage + ",#fff " + percentage + ",#fff 100%);\
+                    background: linear-gradient(to right,  #57b2f8 0%,#57b2f8 " + percentage + ",#fff " + percentage + ",#fff 100%);";
+            quizProgressBar.forEach(function (element) { element.style = style });
+        }
+
+        function changeText(text) {
+            progressBarText.forEach(function (element) { element.innerHTML = text });
+        }
+
+        return pub;
+    })();
+})();
