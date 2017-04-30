@@ -12,10 +12,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .sg-icon-as-button--disabled {
     opacity: 0.45;
     cursor: default;
+}
+
+.sg-label__text--underline{
+    text-decoration: underline;
 }
