@@ -126,11 +126,25 @@
             answersFormsArray.forEach(function (element) { element.classList.add("display-none"); });
             actionButtonsSeperator.forEach(function (element) { element.classList.add("display-none"); });
             quizAdditonalInfoPanel.forEach(function (element) { element.classList.add("display-none"); });
-            setQuizMessage(createResultView());
+            setQuizMessage(createResultView(calculateUsersPerformance()));
         }
 
-        function createResultView() {
-            var message = "";
+        function calculateUsersPerformance() {
+            var correct = 0;
+            for (let eachAnswerIndex in quizData['answers']) {
+                let usersAnswer = quizData['answers'][eachAnswerIndex];
+                if (quizData['questions'][eachAnswerIndex]['answers'][usersAnswer]['correct']) {
+                    correct += 1;
+                }
+            }
+            return correct;
+        }
+
+        function createResultView(usersPerformance) {
+            var message = '<div class="sg-content-box__content sg-content-box__content--spaced-bottom-large">\
+                                <p class="sg-text sg-text--standout"> You scored ' + usersPerformance + ' out of ' + quizData['questions'].length + ' points.</p>\
+                            </div>\
+                            <div class="sg-horizontal-separator sg-horizontal-separator--short-spaced"></div>';
             for (let eachQuestionIndex in quizData['questions']) {
                 let eachQuestion = quizData['questions'][eachQuestionIndex];
                 message += '\
@@ -167,8 +181,8 @@
             quizProgressBar = Array.from(document.getElementsByClassName('quiz-progress-bar'));
 
         pub.changeValue = function (currentQuestion, allQuestions) {
-            changeProgress(currentQuestion / allQuestions);
             changeText(currentQuestion + "/" + allQuestions);
+            changeProgress(currentQuestion / allQuestions);
         }
 
         function changeProgress(value) {
