@@ -80,6 +80,7 @@
             answersFormsArray.forEach2(function (element) { element.classList.remove("display-none"); });
             actionButtonsSeperator.forEach2(function (element) { element.classList.remove("display-none"); });
             quizAdditonalInfoPanel.forEach2(function (element) { element.classList.remove("display-none"); });
+            Timer.startTimer(quizData['time_seconds']);
             showQuestion(0);
         }
 
@@ -108,7 +109,7 @@
                 showQuestion(which);
             }
             else if (which >= quizData['questions'].length) {
-                pub.showResults();
+                Timer.stopTimerAndShowTheResults();
             }
         }
 
@@ -213,6 +214,40 @@
 
         function changeText(text) {
             progressBarText.forEach2(function (element) { element.innerHTML = text });
+        }
+
+        return pub;
+    })();
+
+    var Timer = (function () {
+        var pub = {},
+            timersArray = Array.from(document.getElementsByClassName('js-quiz-timer')),
+            timer;
+
+        pub.startTimer = function (time) {
+            var minutes, seconds, timeString = "";
+            setTimer(time);
+            timer = setInterval(function () {
+                time = time - 1;
+                if (time < 0) { pub.stopTimerAndShowTheResults() };
+                setTimer(time);
+            }, 1000);
+        }
+
+        pub.stopTimerAndShowTheResults = function () {
+            clearInterval(timer);
+            Quiz.showResults();
+        }
+
+        function setTimer(time) {
+            var minutes = Math.floor(time / 60);
+            var seconds = time % 60;
+            var timeString = strPadLeft(minutes, '0', 2) + ':' + strPadLeft(seconds, '0', 2);
+            timersArray.forEach2(function (element) { element.innerHTML = timeString });
+        }
+
+        function strPadLeft(string, pad, length) {
+            return (new Array(length + 1).join(pad) + string).slice(-length);
         }
 
         return pub;
