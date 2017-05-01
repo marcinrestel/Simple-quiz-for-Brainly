@@ -1,6 +1,6 @@
-(function () {
-    "use strict";
+"use strict";
 
+(function () {
     Array.prototype.forEach2 = function (a) {
         var l = this.length;
         for (var i = 0; i < l; i++) {
@@ -9,7 +9,7 @@
     }
 
     function arrayHasOwnIndex(array, prop) {
-        return array.hasOwnProperty(prop) && /^0$|^[1-9]\d*$/.test(prop) && prop <= 4294967294; // 2^32 - 2
+        return array.hasOwnProperty(prop) && /^0$|^[1-9]\d*$/.test(prop) && prop <= 4294967294;
     }
 
     window.onload = function () {
@@ -62,7 +62,6 @@
 
         function prepareForStartingTheQuiz(answerJSON) {
             quizData = answerJSON;
-            console.log(quizData);
             quizData['answers'] = Array();
             startButtonsArray.forEach2(function (element) { element.classList.remove("display-none") });
             var timeLimit = quizData['time_seconds'] > 0 ? "Please be aware you have to end the quiz within " + quizData['time_seconds'] + " seconds. There will be no possibility to pause. " : "";
@@ -204,11 +203,11 @@
         }
 
         function changeProgress(value) {
-            var percentage = value * 100 + "%";
+            var percentage = value * 100;
             var style = "background: #fff;\
-                    background: -moz-linear-gradient(left,  #57b2f8 0%, #57b2f8 " + percentage + ", #fff " + percentage + ", #fff 100%);\
-                    background: -webkit-linear-gradient(left,  #57b2f8 0%,#57b2f8 " + percentage + ",#fff " + percentage + ",#fff 100%);\
-                    background: linear-gradient(to right,  #57b2f8 0%,#57b2f8 " + percentage + ",#fff " + percentage + ",#fff 100%);";
+                    background: -moz-linear-gradient(left,  #57b2f8 0%, #57b2f8 " + percentage + "%, #fff " + percentage + "%, #fff 100%);\
+                    background: -webkit-linear-gradient(left,  #57b2f8 0%,#57b2f8 " + percentage + "%, #fff " + percentage + "%, #fff 100%);\
+                    background: linear-gradient(to right,  #57b2f8 0%,#57b2f8 " + percentage + "%, #fff " + percentage + "%, #fff 100%);";
             quizProgressBar.forEach2(function (element) { element.style = style });
         }
 
