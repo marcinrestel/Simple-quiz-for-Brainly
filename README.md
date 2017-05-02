@@ -1,6 +1,4 @@
-# Brainly Intership Challenge App
-
-## Description
+# Brainly Internship Challenge App
 
 A simple quiz made as an intership challange for [Brainly](https://brainly.co/). You can see the result using [GitHub Pages](https://marcinrestel.github.io/Simple-quiz-for-Brainly/quiz.html). 
 
