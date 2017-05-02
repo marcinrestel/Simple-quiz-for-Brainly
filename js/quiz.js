@@ -26,21 +26,19 @@
             answersFormsArray = Array.from(document.getElementsByClassName("js-quiz-answers-form")),
             answersLabelsArray = Array.from(document.getElementsByClassName("js-quiz-answers-labels")),
             quizMessagesArray = Array.from(document.getElementsByClassName("js-quiz-message")),
-            actionButtonsSeperator = Array.from(document.getElementsByClassName("js-action-buttons-seperator")),
-            quizAdditonalInfoPanel = Array.from(document.getElementsByClassName('js-quiz-data'));
+            actionButtonsSeperatorsArray = Array.from(document.getElementsByClassName("js-action-buttons-seperator")),
+            quizAdditonalInfoPanelsArray = Array.from(document.getElementsByClassName('js-quiz-data'));
 
         getQuizJSON()
             .then(answerJSON => prepareForStartingTheQuiz(answerJSON))
             .catch(function () { setQuizMessage("There was an error in loading the quiz. Please try again later. We're sorry for your inconvenience.") });
 
         pub.init = function () {
-            startButtonsArray.forEach2(function (element) { element.addEventListener("click", function () { startQuiz(); }) });
-            nextButtonsArray.forEach2(function (element) { element.addEventListener("click", function () { changeQuestion("forward"); }) });
-            previousButtonsArray.forEach2(function (element) { element.addEventListener("click", function () { changeQuestion("backward"); }) });
-            quizRadioInputsArray.forEach2(function (element) {
-                element.onclick = function () {
-                    nextButtonsArray.forEach2(function (element, index) { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
-                }
+            startButtonsArray.forEach2(element => element.addEventListener("click", function () { startQuiz(); }));
+            nextButtonsArray.forEach2(element => element.addEventListener("click", function () { changeQuestion("forward"); }));
+            previousButtonsArray.forEach2(element => element.addEventListener("click", function () { changeQuestion("backward"); }));
+            quizRadioInputsArray.forEach2(element => element.onclick = function () {
+                nextButtonsArray.forEach2(element => { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
             });
         }
 
@@ -63,30 +61,30 @@
         function prepareForStartingTheQuiz(answerJSON) {
             quizData = answerJSON;
             quizData['answers'] = Array();
-            startButtonsArray.forEach2(function (element) { element.classList.remove("display-none") });
+            startButtonsArray.forEach2(element => element.classList.remove("display-none"));
             var timeLimit = quizData['time_seconds'] > 0 ? "Please be aware you have to end the quiz within " + quizData['time_seconds'] + " seconds. There will be no possibility to pause. " : "";
             setQuizMessage("Everything is set up for your quiz. " + timeLimit + "Good luck!");
         }
 
         function setQuizMessage(message) {
-            quizMessagesArray.forEach2(function (element) { element.innerHTML = message });
+            quizMessagesArray.forEach2(element => element.innerHTML = message);
         }
 
         function startQuiz() {
-            startButtonsArray.forEach2(function (element) { element.classList.add("display-none"); });
-            previousButtonsArray.forEach2(function (element) { element.classList.remove("display-none"); });
-            nextButtonsArray.forEach2(function (element) { element.classList.remove("display-none"); });
-            answersFormsArray.forEach2(function (element) { element.classList.remove("display-none"); });
-            actionButtonsSeperator.forEach2(function (element) { element.classList.remove("display-none"); });
-            quizAdditonalInfoPanel.forEach2(function (element) { element.classList.remove("display-none"); });
+            startButtonsArray.forEach2(element => element.classList.add("display-none"));
+            previousButtonsArray.forEach2(element => element.classList.remove("display-none"));
+            nextButtonsArray.forEach2(element => element.classList.remove("display-none"));
+            answersFormsArray.forEach2(element => element.classList.remove("display-none"));
+            actionButtonsSeperatorsArray.forEach2(element => element.classList.remove("display-none"));
+            quizAdditonalInfoPanelsArray.forEach2(element => element.classList.remove("display-none"));
             Timer.startTimer(quizData['time_seconds']);
             showQuestion(0);
         }
 
         function showQuestion(which) {
             setQuizMessage(quizData['questions'][which]['question']);
-            answersLabelsArray.forEach2(function (element, index) { element.innerHTML = quizData['questions'][which]['answers'][index]['answer'] });
-            quizRadioInputsArray.forEach2(function (element, index) { handleWithCheckingRadios(element, index, which); })
+            answersLabelsArray.forEach2((element, index) => { element.innerHTML = quizData['questions'][which]['answers'][index]['answer'] });
+            quizRadioInputsArray.forEach2((element, index) => handleWithCheckingRadios(element, index, which))
             ProgressBar.changeValue(which + 1, quizData['questions'].length);
         }
 
@@ -100,11 +98,11 @@
 
         function changeQuestion(direction) {
             var changeValue = direction === "forward" ? 1 : direction === "backward" ? -1 : 0;
-            var which = parseInt(answersFormsArray.map(function (element) { return element.getAttribute('data-current-question') })[0]) + changeValue;
+            var which = parseInt(answersFormsArray.map(element => element.getAttribute('data-current-question'))[0]) + changeValue;
             storeCurrentAnswer();
             if (!(which >= quizData['questions'].length || which < 0)) {
                 handleDisablingButtonsOnQuestionChange(which);
-                answersFormsArray.forEach2(function (element) { element.setAttribute('data-current-question', which) });
+                answersFormsArray.forEach2(element => element.setAttribute('data-current-question', which));
                 showQuestion(which);
             }
             else if (which >= quizData['questions'].length) {
@@ -116,27 +114,27 @@
             quizRadioInputsArray.forEach2(
                 function (element, index) {
                     if (element.checked) {
-                        quizData.answers[answersFormsArray.map(function (element) { return element.getAttribute('data-current-question') })[0]] = index;
+                        quizData.answers[answersFormsArray.map(element => element.getAttribute('data-current-question'))[0]] = index;
                     }
                 });
         }
 
         function handleDisablingButtonsOnQuestionChange(which) {
             if (which <= 0) {
-                previousButtonsArray.forEach2(function (element) { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
+                previousButtonsArray.forEach2(element => { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
             }
             else {
-                previousButtonsArray.forEach2(function (element) { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
+                previousButtonsArray.forEach2(element => { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
             }
-            nextButtonsArray.forEach2(function (element) { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
+            nextButtonsArray.forEach2(element => { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
         }
 
         pub.showResults = function () {
-            nextButtonsArray.forEach2(function (element) { element.classList.add("display-none"); });
-            previousButtonsArray.forEach2(function (element) { element.classList.add("display-none"); });
-            answersFormsArray.forEach2(function (element) { element.classList.add("display-none"); });
-            actionButtonsSeperator.forEach2(function (element) { element.classList.add("display-none"); });
-            quizAdditonalInfoPanel.forEach2(function (element) { element.classList.add("display-none"); });
+            nextButtonsArray.forEach2(element => element.classList.add("display-none"));
+            previousButtonsArray.forEach2(element => element.classList.add("display-none"));
+            answersFormsArray.forEach2(element => element.classList.add("display-none"));
+            actionButtonsSeperatorsArray.forEach2(element => element.classList.add("display-none"));
+            quizAdditonalInfoPanelsArray.forEach2(element => element.classList.add("display-none"));
             setQuizMessage(createResultView(calculateUsersPerformance()));
         }
 
@@ -194,8 +192,8 @@
 
     var ProgressBar = (function () {
         var pub = {},
-            progressBarText = Array.from(document.getElementsByClassName("js-quiz-progress-bar-text")),
-            quizProgressBar = Array.from(document.getElementsByClassName('quiz-progress-bar'));
+            progressBarTextsArray = Array.from(document.getElementsByClassName("js-quiz-progress-bar-text")),
+            quizProgressBarsArray = Array.from(document.getElementsByClassName('quiz-progress-bar'));
 
         pub.changeValue = function (currentQuestion, allQuestions) {
             changeText(currentQuestion + "/" + allQuestions);
@@ -208,11 +206,11 @@
                     background: -moz-linear-gradient(left,  #57b2f8 0%, #57b2f8 " + percentage + "%, #fff " + percentage + "%, #fff 100%);\
                     background: -webkit-linear-gradient(left,  #57b2f8 0%,#57b2f8 " + percentage + "%, #fff " + percentage + "%, #fff 100%);\
                     background: linear-gradient(to right,  #57b2f8 0%,#57b2f8 " + percentage + "%, #fff " + percentage + "%, #fff 100%);";
-            quizProgressBar.forEach2(function (element) { element.style = style });
+            quizProgressBarsArray.forEach2(element => element.style = style);
         }
 
         function changeText(text) {
-            progressBarText.forEach2(function (element) { element.innerHTML = text });
+            progressBarTextsArray.forEach2(element => element.innerHTML = text);
         }
 
         return pub;
@@ -220,8 +218,8 @@
 
     var Timer = (function () {
         var pub = {},
-            timersArray = Array.from(document.getElementsByClassName('js-quiz-timer')),
-            timer;
+            timer,
+            timersArray = Array.from(document.getElementsByClassName('js-quiz-timer'));
 
         pub.startTimer = function (time) {
             var minutes, seconds, timeString = "";
@@ -242,7 +240,7 @@
             var minutes = Math.floor(time / 60);
             var seconds = time % 60;
             var timeString = strPadLeft(minutes, '0', 2) + ':' + strPadLeft(seconds, '0', 2);
-            timersArray.forEach2(function (element) { element.innerHTML = timeString });
+            timersArray.forEach2(element => element.innerHTML = timeString);
         }
 
         function strPadLeft(string, pad, length) {
