@@ -19,26 +19,27 @@
     var Quiz = (function () {
         var pub = {},
             quizData,
-            startButtonsArray = Array.from(document.getElementsByClassName("js-quiz-start-button")),
-            nextButtonsArray = Array.from(document.getElementsByClassName("js-quiz-next-button")),
-            previousButtonsArray = Array.from(document.getElementsByClassName("js-quiz-previous-button")),
+            startButton = document.querySelector(".js-quiz-start-button"),
+            nextButton = document.querySelector(".js-quiz-next-button"),
+            previousButton = document.querySelector(".js-quiz-previous-button"),
+            quizMessage = document.querySelector(".js-quiz-message"),
+            actionButtonsSeperator = document.querySelector(".js-action-buttons-seperator"),
+            quizAdditonalInfoPanel = document.querySelector(".js-quiz-data"),
+            answersForm = document.querySelector(".js-quiz-answers-form"),
             quizRadioInputsArray = Array.from(document.getElementsByName("js-quiz-radio-input")),
-            answersFormsArray = Array.from(document.getElementsByClassName("js-quiz-answers-form")),
-            answersLabelsArray = Array.from(document.getElementsByClassName("js-quiz-answers-labels")),
-            quizMessagesArray = Array.from(document.getElementsByClassName("js-quiz-message")),
-            actionButtonsSeperatorsArray = Array.from(document.getElementsByClassName("js-action-buttons-seperator")),
-            quizAdditonalInfoPanelsArray = Array.from(document.getElementsByClassName('js-quiz-data'));
+            answersLabelsArray = Array.from(document.getElementsByClassName("js-quiz-answers-labels"));
 
         getQuizJSON()
             .then(answerJSON => prepareForStartingTheQuiz(answerJSON))
             .catch(function () { setQuizMessage("There was an error in loading the quiz. Please try again later. We're sorry for your inconvenience.") });
 
         pub.init = function () {
-            startButtonsArray.forEach2(element => element.addEventListener("click", function () { startQuiz(); }));
-            nextButtonsArray.forEach2(element => element.addEventListener("click", function () { changeQuestion("forward"); }));
-            previousButtonsArray.forEach2(element => element.addEventListener("click", function () { changeQuestion("backward"); }));
+            startButton.addEventListener("click", () => startQuiz());
+            nextButton.addEventListener("click", () => changeQuestion("forward"));
+            previousButton.addEventListener("click", () => changeQuestion("backward"));
             quizRadioInputsArray.forEach2(element => element.onclick = function () {
-                nextButtonsArray.forEach2(element => { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
+                nextButton.classList.remove("sg-icon-as-button--disabled"); 
+                nextButton.disabled = false;
             });
         }
 
@@ -61,22 +62,22 @@
         function prepareForStartingTheQuiz(answerJSON) {
             quizData = answerJSON;
             quizData['answers'] = Array();
-            startButtonsArray.forEach2(element => element.classList.remove("display-none"));
+            startButton.classList.remove("display-none");
             var timeLimit = quizData['time_seconds'] > 0 ? "Please be aware you have to end the quiz within " + quizData['time_seconds'] + " seconds. There will be no possibility to pause. " : "";
             setQuizMessage("Everything is set up for your quiz. " + timeLimit + "Good luck!");
         }
 
         function setQuizMessage(message) {
-            quizMessagesArray.forEach2(element => element.innerHTML = message);
+            quizMessage.innerHTML = message;
         }
 
         function startQuiz() {
-            startButtonsArray.forEach2(element => element.classList.add("display-none"));
-            previousButtonsArray.forEach2(element => element.classList.remove("display-none"));
-            nextButtonsArray.forEach2(element => element.classList.remove("display-none"));
-            answersFormsArray.forEach2(element => element.classList.remove("display-none"));
-            actionButtonsSeperatorsArray.forEach2(element => element.classList.remove("display-none"));
-            quizAdditonalInfoPanelsArray.forEach2(element => element.classList.remove("display-none"));
+            startButton.classList.add("display-none");
+            previousButton.classList.remove("display-none");
+            nextButton.classList.remove("display-none");
+            answersForm.classList.remove("display-none");
+            actionButtonsSeperator.classList.remove("display-none");
+            quizAdditonalInfoPanel.classList.remove("display-none");
             Timer.startTimer(quizData['time_seconds']);
             showQuestion(0);
         }
@@ -98,11 +99,11 @@
 
         function changeQuestion(direction) {
             var changeValue = direction === "forward" ? 1 : direction === "backward" ? -1 : 0;
-            var which = parseInt(answersFormsArray.map(element => element.getAttribute('data-current-question'))[0]) + changeValue;
+            var which = parseInt(answersForm.getAttribute('data-current-question')) + changeValue;
             storeCurrentAnswer();
             if (!(which >= quizData['questions'].length || which < 0)) {
                 handleDisablingButtonsOnQuestionChange(which);
-                answersFormsArray.forEach2(element => element.setAttribute('data-current-question', which));
+                answersForm.setAttribute('data-current-question', which);
                 showQuestion(which);
             }
             else if (which >= quizData['questions'].length) {
@@ -114,27 +115,30 @@
             quizRadioInputsArray.forEach2(
                 function (element, index) {
                     if (element.checked) {
-                        quizData.answers[answersFormsArray.map(element => element.getAttribute('data-current-question'))[0]] = index;
+                        quizData.answers[answersForm.getAttribute('data-current-question')] = index;
                     }
                 });
         }
 
         function handleDisablingButtonsOnQuestionChange(which) {
             if (which <= 0) {
-                previousButtonsArray.forEach2(element => { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
+                previousButton.classList.add("sg-icon-as-button--disabled");
+                previousButton.disabled = true;
             }
             else {
-                previousButtonsArray.forEach2(element => { element.classList.remove("sg-icon-as-button--disabled"); element.disabled = false; });
+                previousButton.classList.remove("sg-icon-as-button--disabled");
+                previousButton.disabled = false;
             }
-            nextButtonsArray.forEach2(element => { element.classList.add("sg-icon-as-button--disabled"); element.disabled = true; });
+            nextButton.classList.add("sg-icon-as-button--disabled");
+            nextButton.disabled = true;
         }
 
         pub.showResults = function () {
-            nextButtonsArray.forEach2(element => element.classList.add("display-none"));
-            previousButtonsArray.forEach2(element => element.classList.add("display-none"));
-            answersFormsArray.forEach2(element => element.classList.add("display-none"));
-            actionButtonsSeperatorsArray.forEach2(element => element.classList.add("display-none"));
-            quizAdditonalInfoPanelsArray.forEach2(element => element.classList.add("display-none"));
+            nextButton.classList.add("display-none");
+            previousButton.classList.add("display-none");
+            answersForm.classList.add("display-none");
+            actionButtonsSeperator.classList.add("display-none");
+            quizAdditonalInfoPanel.classList.add("display-none");
             setQuizMessage(createResultView(calculateUsersPerformance()));
         }
 
@@ -192,8 +196,8 @@
 
     var ProgressBar = (function () {
         var pub = {},
-            progressBarTextsArray = Array.from(document.getElementsByClassName("js-quiz-progress-bar-text")),
-            quizProgressBarsArray = Array.from(document.getElementsByClassName('quiz-progress-bar'));
+            progressBarText = document.querySelector(".js-quiz-progress-bar-text"),
+            quizProgressBar = document.querySelector(".js-quiz-progress-bar");
 
         pub.changeValue = function (currentQuestion, allQuestions) {
             changeText(currentQuestion + "/" + allQuestions);
@@ -206,11 +210,11 @@
                     background: -moz-linear-gradient(left,  #57b2f8 0%, #57b2f8 " + percentage + "%, #fff " + percentage + "%, #fff 100%);\
                     background: -webkit-linear-gradient(left,  #57b2f8 0%,#57b2f8 " + percentage + "%, #fff " + percentage + "%, #fff 100%);\
                     background: linear-gradient(to right,  #57b2f8 0%,#57b2f8 " + percentage + "%, #fff " + percentage + "%, #fff 100%);";
-            quizProgressBarsArray.forEach2(element => element.style = style);
+            quizProgressBar.style = style;
         }
 
         function changeText(text) {
-            progressBarTextsArray.forEach2(element => element.innerHTML = text);
+            progressBarText.innerHTML = text;
         }
 
         return pub;
@@ -218,29 +222,29 @@
 
     var Timer = (function () {
         var pub = {},
-            timer,
-            timersArray = Array.from(document.getElementsByClassName('js-quiz-timer'));
+            intervalTimer,
+            timer = document.querySelector(".js-quiz-timer");
 
         pub.startTimer = function (time) {
             var minutes, seconds, timeString = "";
-            setTimer(time);
-            timer = setInterval(function () {
+            setTimerView(time);
+            intervalTimer = setInterval(function () {
                 time = time - 1;
                 if (time < 0) { pub.stopTimerAndShowTheResults() };
-                setTimer(time);
+                setTimerView(time);
             }, 1000);
         }
 
         pub.stopTimerAndShowTheResults = function () {
-            clearInterval(timer);
+            clearInterval(intervalTimer);
             Quiz.showResults();
         }
 
-        function setTimer(time) {
+        function setTimerView(time) {
             var minutes = Math.floor(time / 60);
             var seconds = time % 60;
             var timeString = strPadLeft(minutes, '0', 2) + ':' + strPadLeft(seconds, '0', 2);
-            timersArray.forEach2(element => element.innerHTML = timeString);
+            timer.innerHTML = timeString;
         }
 
         function strPadLeft(string, pad, length) {
