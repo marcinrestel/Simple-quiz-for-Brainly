@@ -1,6 +1,6 @@
 # Brainly Internship Challenge App
 
-A simple quiz made as an intership challange for [Brainly](https://brainly.co/). You can see the result using [GitHub Pages](https://marcinrestel.github.io/Simple-quiz-for-Brainly/quiz.html). 
+A simple quiz made as an intership challange for [Brainly](https://brainly.co/). You can see the result using [GitHub Pages](https://marcinrestel.github.io/timed-quiz/quiz.html). 
 
 ![obraz](https://cloud.githubusercontent.com/assets/25925647/25641649/8e6a7782-2f95-11e7-9c8c-53fc4e9546c7.png)
 
